@@ -1,0 +1,95 @@
+We already have a working Developer Admin Panel with 6 tabs and mock data.
+Now we want to add intelligent mock logic so the developer can see REALISTIC CP activity summaries without exposing customer details.
+
+⚠ Do NOT connect to backend, do NOT reveal customer-level lead data.
+
+Update the Developer Dashboard to use mock data representing Channel Partner performance.
+We will add a shared mock data structure for all CP activity that contains fields like:
+
+{
+  projectName: "Lutyens",
+  cpName: "Aman",
+  company: "InvestHomes",
+  totalLeads: 18,
+  hasRunAds: true,
+  creativesReceived: 5,
+  edmSent: 2
+}
+
+Create a mock array with 10–20 sample rows across 2–3 projects (e.g., “Lutyens”, “California State”).
+
+Using this mock dataset, update UI tab logic as follows:
+
+-------------------------
+1) Dashboard tab
+-------------------------
+For each project, calculate and display:
+- Number of CPs working on that project
+- Number of CPs who have run ads (`hasRunAds === true`)
+- Total leads generated per project (`sum totalLeads`)
+- Engagement status (use threshold rules below)
+Use visual badges or labels for engagement:
+- High Activity (sum leads per project > 40)
+- Active (20–40)
+- Low Activity (< 20)
+
+-------------------------
+2) Projects tab
+-------------------------
+List all projects with summary values from mock data.
+
+When “View Details” is opened for a project, show a table of CPs working on that project with columns:
+- CP Name
+- Company Name
+- Total Leads for this project
+- Has run ads (Yes/No)
+- Engagement (High / Active / Low)
+
+Engagement rule for each CP:
+- > 20 leads = High
+- 5–20 leads = Active
+- < 5 leads = Low
+
+-------------------------
+3) Channel Partners tab
+-------------------------
+From the same dataset, create a master list of CPs across all projects with:
+- CP Name
+- Company Name
+- City (use mock)
+- Number of projects they are attached to
+- Total leads across all projects
+Sort CPs by total leads descending (most active at the top).
+
+-------------------------
+4) Marketing & Ads tab
+-------------------------
+Instead of random static numbers, compute summary numbers dynamically:
+
+Top cards:
+- Creatives provided today (sum creativesReceived for today = mock 0)
+- Creatives this month (sum creativesReceived)
+- Total creatives (sum creativesReceived)
+- Total EDMs sent (sum edmSent)
+
+Table should list entries grouped by project using mock data:
+- Date (mock)
+- Type (Creative / EDM)
+- Project
+- Count
+
+-------------------------
+5) Performance labels
+-------------------------
+Any place we show CP or project activity, add visual colored badges:
+- High Activity = green
+- Active = blue
+- Low Activity = orange or gray
+
+-------------------------
+Rules
+-------------------------
+- DO NOT show individual customer/lead details (no phone numbers, names, messages).
+- DO NOT modify the CP dashboard.
+- DO NOT modify the homepage.
+- Only update Developer Dashboard UI logic to use this shared mock dataset.

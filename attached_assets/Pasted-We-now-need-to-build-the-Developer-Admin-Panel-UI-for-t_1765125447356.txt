@@ -1,0 +1,122 @@
+We now need to build the **Developer Admin Panel UI** for the Developer role.
+
+Important:
+- Do NOT change the CP Admin Panel or homepage.
+- This task is only to build the Developer Panel UI (front-end only, no backend).
+- All data can be mock / static for now.
+
+Create a new component/layout called `DeveloperDashboardLayout` (or similar) that loads when the route `/developer-dashboard` is opened.
+
+Styling:
+- Use the same color theme as the CP panel (dark background, blue + orange accents).
+- Sidebar navigation with the following items:
+  1. Dashboard (default)
+  2. Projects
+  3. Channel Partners
+  4. Invite CPs
+  5. Marketing & Ads
+  6. Profile
+
+Panel structure:
+- It should behave exactly like the CP Admin Panel:
+  - All tabs load inside the same layout (no routing to subpages)
+  - Use a `useState` variable such as `activeTab` to switch content
+  - Clicking a sidebar item only changes `activeTab`, not the URL
+  - Do not cause any 404 errors
+
+---------------------------------------
+TAB CONTENT (with mock data)
+---------------------------------------
+
+1) **Dashboard (default tab)**
+Show high-level project summary for the developer using mock data. Example table or cards for each project:
+- Project name (e.g. Lutyens, California State)
+- Number of CPs working on that project
+- Number of CPs who have run ads for that project
+- Total leads generated (summary count, not individual leads)
+- Status (e.g., Active)
+
+2) **Projects tab**
+List all projects in a table or card layout. Each entry contains:
+- Project name
+- City / Location
+- Number of CPs attached
+- Number of CPs running ads
+- Total leads
+- A button like “View Details” (this can simply open a placeholder modal or expand panel with mock CP list inside it)
+
+For project detail, mock view:
+- List of CPs working on that project
+- Show columns:
+  - CP Name
+  - Company Name
+  - Total leads for the project (summary only)
+  - Has run ads? (Yes/No indicator)
+- Use mock static values.
+
+3) **Channel Partners tab**
+Table of all CPs working with the developer across all projects (mock data).
+Columns:
+- CP Name
+- Company
+- City
+- Number of projects assigned
+- Total leads generated (summary only)
+
+4) **Invite CPs tab**
+Two ways to add CP:
+
+A) Send an invite (form fields):
+- CP Name
+- Company Name
+- Phone
+- Email
+- Dropdown: select project(s) to associate CP with
+- Submit button (front-end only)
+
+B) Generate sharable “White Link” for each project:
+- Show a small list of developer’s projects with a copyable share link (use dummy placeholder URL values for now, e.g., `https://betterside.com/invite/lutyens/ABC123`)
+- When a CP signs up using this link in the future, they should be assigned to that project (for now, just mock the UI)
+
+5) **Marketing & Ads tab**
+Show how many creatives + EDMs BetterSide has provided to CPs (counts only).
+- Top summary cards:
+  - Creatives provided today
+  - Creatives this month
+  - Total creatives
+  - Total EDMs
+- Then a table:
+  - Date, Type (Creative/EDM), Project, Count
+- Use mock data.
+
+6) **Profile tab**
+A simple placeholder showing developer information from mock data:
+- Developer/Group Name
+- Contact Person Name
+- Phone
+- Email
+- City
+- RERA Registered: Yes/No
+- GST Number
+
+Add a “Coming Soon: Edit Profile” note.
+
+---------------------------------------
+NAVIGATION & RULES
+---------------------------------------
+
+- Make `/developer-dashboard` show this panel.
+- Sidebar should highlight active tab.
+- Clicking the BetterSide **logo** should always return to `/` (homepage).
+- Navbar should show:
+  - “Hi, {developerName}”
+  - A link to “Developer Dashboard”
+  - Logout button
+- Do NOT break CP dashboard or Buyer experience.
+
+---------------------------------------
+FINAL NOTES
+---------------------------------------
+- Deliver fully running UI with mock data.
+- No backend, no database, no file upload.
+- The purpose of this step is UI structure only.

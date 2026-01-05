@@ -1,0 +1,100 @@
+You are a senior React + CSS UI developer.
+
+I want you to build ONLY the **homepage** for my product called **BetterSide**.
+
+I will upload my own logo and hero background image later. For now, use placeholders but structure the layout EXACTLY like this style:
+- sandboxvr.com hero section + “Discover our worlds” row + video section.
+
+Tech:
+- Use React.
+- Use modern, clean CSS (CSS modules or a single CSS file). Tailwind is okay if you prefer, but keep classes readable.
+- Make it fully responsive (desktop, tablet, mobile).
+
+Brand:
+- This is for a real estate immersive experience platform (IPX).
+- The logo colors are blue and orange. Use:
+  - Primary: #0057FF (blue)
+  - Accent: #FF6A00 (orange)
+  - Background: #050816 to #0B0F1A dark gradient OR very dark navy.
+- Lots of contrast, cinematic feel, rounded buttons, smooth hover effects.
+
+PAGE STRUCTURE (top to bottom):
+
+1) HERO SECTION (full screen height)
+-----------------------------------
+- Full-bleed hero section (100vh) with a large background image.
+  - For now use a placeholder image like `hero-project.jpg`.
+- NO separate top bar. The navbar should be **overlaid** on top of the hero image, like Sandbox VR.
+- Top-left: BetterSide logo (use placeholder `betterside-logo.png`).
+- Top-right: navigation links in a single row:
+  - “For Developers”
+  - “For Channel Partners”
+  - “For Home Buyers”
+  - “About”
+  - A pill-shaped button: “Login”
+- Centered vertically (or slightly lower than center) add:
+  - Small label text above headline: “IMMERSIVE PROJECT EXPERIENCE (IPX)”
+  - Big bold headline: “Experience Real Estate Before It’s Built.”
+  - Short subheading: something like
+    “BetterSide helps you explore trusted pre-launch and under-construction projects in full immersive 3D.”
+  - Primary CTA button: “Explore IPX Projects”
+  - Secondary CTA button (outline style): “Talk to Our Team”
+- At the very bottom of the hero, add:
+  - A subtle gradient fade into the next section.
+  - Small slider-style dots (3–4) to suggest there can be multiple hero slides (like Sandbox VR). Only the first needs to be “active”; no real slider logic needed yet.
+
+2) “DISCOVER PROJECTS” HORIZONTAL CARDS SECTION
+-----------------------------------------------
+- Dark background (#050816 or similar) continuing from hero, with some spacing.
+- Section title centered at top: “DISCOVER OUR PROJECT WORLDS”
+  - Smaller subtitle below: “Handpicked IPX experiences from trusted developers.”
+- Under the title, a horizontally scrollable row of **large project cards**, similar to the “Discover our worlds” section of Sandbox VR:
+  - Each card:
+    - Big thumbnail image (placeholder, e.g. `project1.jpg`) with rounded corners and a soft shadow.
+    - On the image, small corner labels such as:
+      - Top-left: “NEW”, “BEST SELLER”, “PRE-LAUNCH” (use blue or orange badges).
+    - Below the image:
+      - Project Title (e.g. “Skyline Heights, Zirakpur”).
+      - Smaller text line: “Luxury 3 & 4 BHK • Trusted Developer”.
+  - Make 4–6 mock project cards.
+  - Cards should be in a horizontally scrollable container with smooth scrolling and visible partial next card on desktop (like a carousel strip), but no complex slider needed; just overflow-x scroll.
+
+3) FEATURED VIDEO / BIG THUMBNAIL SECTION
+-----------------------------------------
+- Next section: a full-width “featured project” block, similar to the Sandbox VR video area.
+- Layout:
+  - Large 16:9 video-style container centered on page with rounded corners.
+  - Use a dark overlay and big **play button** in the center (blue circular button).
+  - Background is a still image placeholder like `featured-project.jpg`.
+- Below (or overlaid at the bottom of the video frame) add:
+  - Project name in bold.
+  - One line of description (e.g. “Full immersive tour of Lakeside Residences, pre-launch in Mohali.”).
+- Under the video, centered buttons:
+  - Solid blue button: “View Full IPX Experience”
+  - Outline button: “Connect with a Channel Partner”
+- Under the buttons, add a subtle small text line: “Powered by BetterSide — only verified developers listed.”
+
+GENERAL STYLING GUIDELINES
+--------------------------
+- Use the blue (#0057FF) and orange (#FF6A00) with dark backgrounds and white text.
+- Buttons:
+  - Primary: blue background, white text, slightly rounded (24px radius), box-shadow, hover = slightly lighter blue + raise effect.
+  - Secondary: transparent with white border or blue border, white text, hover = subtle background tint.
+- Typography:
+  - Hero heading: large, bold, clean sans-serif.
+  - Body text: slightly smaller, high readability, line-height relaxed.
+- Use spacing and padding so that everything feels premium and cinematic, not cramped.
+- Add smooth hover effects to project cards (slight scale up and shadow).
+
+ROUTING / STRUCTURE
+-------------------
+- Create a single React component called `HomePage` that includes:
+  - HeroSection
+  - DiscoverProjectsSection
+  - FeaturedVideoSection
+- Export `HomePage` as default and render it in the root App component.
+- Use static mock data for project names, tags, etc.
+
+Deliverable:
+- A working React project with this single homepage view.
+- Clean, well-structured JSX and CSS so I can later plug in real images and copy.

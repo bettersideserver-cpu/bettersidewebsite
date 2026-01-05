@@ -1,0 +1,72 @@
+We already have a working homepage and a working CP Admin Panel.
+
+Now I want to upgrade the login/signup flow with proper data collection and role-based redirects.
+
+TASK:
+
+1) When a user clicks "Login", instead of the dummy login, show:
+   Step 1 — "Who are you?"
+   Options:
+   - Channel Partner
+   - Home Buyer / Investor
+   - Developer
+
+   Use radio buttons or a dropdown.
+
+2) After choosing a role -> show a role-specific signup form:
+
+   For Channel Partner:
+   - Full Name
+   - Phone
+   - Email
+   - Company / Firm Name
+   - City
+   - Submit button
+
+   For Home Buyer / Investor:
+   - Full Name
+   - Phone
+   - Email
+   - City
+   - (optional) Budget
+   - Submit button
+
+   For Developer:
+   - Developer / Group Name
+   - Contact Person Name
+   - Phone
+   - Email
+   - City
+   - GST Number
+   - RERA Registration Number
+   - Toggle for “Are you RERA Registered?”
+   - (optional) Text field to paste link to documents
+   - Submit button
+
+3) After submit, save user info to localStorage:
+   - userName
+   - userRole (cp / buyer / developer)
+
+4) Redirect based on role:
+   - If Channel Partner -> `/cp-dashboard`
+   - If Home Buyer / Investor -> `/` (homepage)
+   - If Developer -> `/developer-dashboard` (create a blank placeholder page for now)
+
+5) Navbar update:
+   - Replace the Login button with text like: “Hi, {userName}”
+   - If userRole is “cp”, show a “CP Dashboard” navbar link
+   - If userRole is “developer”, show a “Developer Dashboard” navbar link
+   - If userRole is “buyer”, no dashboard link
+   - Add a “Logout” button that clears localStorage and returns to homepage
+
+6) From the CP Dashboard and Developer Dashboard pages:
+   - Clicking the BetterSide logo in navbar should take user to `/`
+   - Dashboard navigation links should still work normally
+
+7) Do NOT modify the existing CP Dashboard content or layout.
+   Just connect the login and role redirect.
+
+8) Create a temporary placeholder `DeveloperDashboard` component rendered at `/developer-dashboard` that only shows:
+   “Welcome Developer, Developer Dashboard coming soon.”
+
+Once done, everything should run without breaking the existing UI or logic.

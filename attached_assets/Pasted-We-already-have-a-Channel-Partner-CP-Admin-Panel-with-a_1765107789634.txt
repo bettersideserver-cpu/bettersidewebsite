@@ -1,0 +1,90 @@
+We already have a Channel Partner (CP) Admin Panel with a sidebar and a working Dashboard tab, but when I click the other sidebar items (Leads, Run Ads, Marketing Support, Profile) I get a 404 page.
+
+Please fix this by turning the CP Panel into a SINGLE page with internal tab switching, instead of separate routes.
+
+Steps:
+
+1) Find the CP Admin Panel component
+   - It might be named something like `CpAdminLayout`, `CpPanel`, or `CpDashboard`.
+   - This is the component that shows the sidebar with:
+     - Dashboard
+     - Leads
+     - Run Ads
+     - Marketing Support
+     - Profile
+
+2) Remove routing-based navigation from the sidebar
+   - If the sidebar items are using `<Link>` or `<NavLink>` that change the URL (e.g. `/cp-dashboard/leads`, `/cp-dashboard/run-ads`, etc.), change them to simple `button` or `div` with `onClick`.
+   - Do NOT navigate to a new route when clicking sidebar items.
+   - Instead, clicking a sidebar item should just change local component state, e.g. `activeTab`.
+
+3) Add local state for active tab
+   - Inside the main CP panel component, add something like:
+
+     ```tsx
+     const [activeTab, setActiveTab] = useState<"dashboard" | "leads" | "runAds" | "marketing" | "profile">("dashboard");
+     ```
+
+   - For each sidebar item:
+     - `Dashboard` → `setActiveTab("dashboard")`
+     - `Leads` → `setActiveTab("leads")`
+     - `Run Ads` → `setActiveTab("runAds")`
+     - `Marketing Support` → `setActiveTab("marketing")`
+     - `Profile` → `setActiveTab("profile")`
+   - Apply an “active” CSS style based on `activeTab` so the selected tab is highlighted (like it already is for Dashboard).
+
+4) Conditionally render the main content by `activeTab`
+
+   - Keep the existing Dashboard UI inside:
+
+     ```tsx
+     {activeTab === "dashboard" && (
+       // existing dashboard JSX here
+     )}
+     ```
+
+   - Create simple content for the other tabs using our requirements. Use mock data.
+
+   **Leads tab (`activeTab === "leads"`):**
+   - Show a full leads table with columns:
+     - Name, Phone, Project, Source, Date, Status, Notes.
+   - Status should be a dropdown with:
+     - "New", "Called – No Answer", "Called – Interested", "Called – Not Interested", "Follow-up".
+   - Add simple mock rows for 5–10 leads.
+
+   **Run Ads tab (`activeTab === "runAds"`):**
+   - Show a card titled “Run Ads with BetterSide”.
+   - Inside, a simple form with fields:
+     - Project (dropdown with 3 mock projects)
+     - City / Area (text input)
+     - Objective (dropdown: "Lead Generation", "Awareness", "Site Visits")
+     - Budget in INR (number input)
+     - Duration in days (number input)
+     - Additional Notes (textarea)
+   - A primary button: “Submit Ad Request”.
+   - Below the form, a table titled “Your Ad Requests” with columns:
+     - Project, Objective, Budget, Duration, Status, Impressions, Clicks, Leads
+     - Fill with 3–4 mock entries.
+
+   **Marketing Support tab (`activeTab === "marketing"`):**
+   - Top row of 4 summary cards:
+     - “Creatives received today”
+     - “Creatives this month”
+     - “Total creatives”
+     - “Total EDMs sent”
+   - Below that, a table with columns:
+     - Date, Type (Creative / EDM), Project, Count
+   - Add a small note at the top:
+     - “Actual creatives and EDMs are shared via WhatsApp or email. This page only tracks counts.”
+
+   **Profile tab (`activeTab === "profile"`):**
+   - Simple card showing mock CP details:
+     - Name, Agency Name, Phone, Email, City.
+   - A “Coming Soon” note for editing profile later.
+
+5) Make sure:
+   - No 404 page is shown when clicking any of the 5 sidebar items.
+   - The URL stays the same (e.g. `/cp-dashboard`) while switching tabs.
+   - Overall styling matches the existing Dashboard design (dark theme, blue highlight, rounded cards).
+
+Do not change the homepage or global routing. Only update the CP Admin Panel component and its sidebar/tab behavior.
