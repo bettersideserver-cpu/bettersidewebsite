@@ -1,0 +1,198 @@
+We have BetterSide converted to "App" mode and the basic DB + auth from Phase 1 is already present. Now implement the **CP Panel backend features** and wire them to the existing CP frontend UI.
+
+GOAL (Option A):
+1. Leads system (create/list/update)
+2. Run Ads request (form → store & list)
+3. Marketing Support counters (creatives/EDMs counts)
+4. CP profile update endpoint
+5. Protect all endpoints—only authenticated CPs can access their resources.
+
+ENV / DB
+- Use the existing PostgreSQL database (if not available use Replit DB as fallback).
+- Add these tables (SQL/pseudo-SQL) and migrations. Use proper foreign keys and indices.
+
+Tables:
+
+1) users
+- id (uuid / serial pk)
+- email (unique)
+- password_hash
+- role (enum: 'cp','developer','buyer')
+- created_at, updated_at
+
+2) cp_profiles
+- id (pk)
+- user_id (fk -> users.id)
+- full_name
+- company_name
+- phone
+- city
+- extra_json (optional jsonb)
+- created_at, updated_at
+
+3) projects
+- id (pk)
+- developer_id (fk -> users.id)
+- title
+- city
+- status
+- created_at, updated_at
+
+4) cp_project_map
+- id (pk)
+- cp_id (fk -> users.id)
+- project_id (fk -> projects.id)
+- assigned_at
+
+5) leads
+- id (pk)
+- cp_id (fk -> users.id) — the CP who owns this lead
+- project_id (fk -> projects.id) nullable
+- name
+- phone
+- email nullable
+- source (enum: 'meta_ads','organic','betterside','referral','other')
+- status (enum: 'new','called_no_answer','interested','not_interested','follow_up','closed')
+- notes text
+- created_at, updated_at
+
+6) ads_requests
+- id (pk)
+- cp_id (fk -> users.id)
+- project_id (fk -> projects.id)
+- objective (enum: 'lead_generation','awareness','site_visits')
+- budget_inr numeric
+- duration_days int
+- notes text
+- status (enum: 'requested','in_discussion','running','completed','cancelled')
+- created_at, updated_at
+
+7) marketing_counters
+- id (pk)
+- cp_id (fk -> users.id)
+- project_id (fk -> projects.id) nullable
+- creatives_shared int default 0
+- edms_shared int default 0
+- last_updated timestamp
+
+API Endpoints (HTTP JSON, all protected by JWT/session):
+
+Auth (already present) — ensure token-based auth (JWT) or server session usable from frontend.
+
+Leads
+- POST /api/cp/leads
+  - Auth required (role cp)
+  - Payload: { project_id?, name, phone, email?, source? }
+  - Validations: phone must be 10 digits (regex), name required.
+  - Response: 201 { lead }
+
+- GET /api/cp/leads
+  - Query params: ?project_id=&status=&page=&limit=
+  - Returns paginated list of leads belonging to logged-in CP.
+  - Response: 200 { data: [lead], meta: { page, total } }
+
+- GET /api/cp/leads/:id
+  - Return single lead (only if cp owns it).
+
+- PUT /api/cp/leads/:id
+  - Update lead fields: status, notes, name, phone, email.
+  - Only CP that owns it can update.
+  - Return updated lead.
+
+- DELETE /api/cp/leads/:id (optional)
+  - Soft-delete or real delete. Return 204.
+
+Ads requests (Run Ads)
+- POST /api/cp/ads-requests
+  - Auth cp
+  - Payload: { project_id, objective, budget_inr, duration_days, notes }
+  - Validate fields. Create with status 'requested'
+  - Response: 201 { ad_request }
+
+- GET /api/cp/ads-requests
+  - List ad requests for the CP. Query params allowed.
+  - Response: 200 { data: [...], meta: {} }
+
+- GET /api/cp/ads-requests/:id
+
+- PUT /api/cp/ads-requests/:id
+  - CP can update notes or cancel (set status to cancelled). BetterSide team will update status server-side later.
+
+Marketing Counters
+- GET /api/cp/marketing
+  - Return counters for logged-in CP, optionally aggregated by project.
+  - Response: { creatives_shared, edms_shared, per_project: [...] }
+
+- POST /api/cp/marketing/increment
+  - Admin-only endpoint (for BetterSide team) OR allow CP to request increment (but better to be admin-only).
+  - payload: { cp_id, project_id?, creatives?:int, edms?:int }
+  - This increments counters and updates last_updated.
+
+Profile
+- GET /api/cp/profile
+  - Returns cp_profiles for logged-in CP.
+
+- PUT /api/cp/profile
+  - Update cp profile fields: full_name, company_name, phone, city, extra_json
+  - Validate phone & city as in front-end rules.
+
+Frontend integration (connect existing CP UI to backend):
+- Update CP dashboard UI to fetch real data from these endpoints instead of mock/local data.
+  - Dashboard summary panel:
+    - Today's Leads = GET /api/cp/leads?date=today -> count
+    - Total Leads = GET /api/cp/leads -> total count
+    - Active Projects = GET /api/cp/projects (derived from cp_project_map OR from leads list unique projects)
+    - Ads in Progress = GET /api/cp/ads-requests?status=running -> count
+
+- Leads tab:
+  - Load: GET /api/cp/leads?page=1&limit=20
+  - Provide UI to change lead status: PATCH/PUT /api/cp/leads/:id (status + notes)
+  - Filters: by project, by status
+
+- Run Ads tab:
+  - Submit form -> POST /api/cp/ads-requests
+  - After submit, show the ad in "Your Ad Requests" table using GET /api/cp/ads-requests
+
+- Marketing Support tab:
+  - Show results from GET /api/cp/marketing
+  - Provide a UI "Request Creative" button that sends a notification/email to BetterSide team. (For now, create POST /api/cp/marketing/request that stores a request record in DB and returns 201; e.g., table marketing_requests { cp_id, project_id, type ('creative'|'edm'), notes, status }.)
+
+Security & Validation:
+- All endpoints must validate input server-side as well as frontend.
+- Ensure CP can only access/modify their own leads/ads/projects.
+- Store passwords hashed (bcrypt or similar).
+- Use environment variables for DB credentials and JWT secret.
+
+Testing & Seed Data:
+- Add a small seed script to create:
+  - 2 CP users with cp_profiles
+  - 2 projects and cp_project_map entries
+  - 6 leads across those CPs
+  - 2 ad requests for each CP
+  - marketing_counters initial values
+
+Error handling:
+- Consistent JSON error responses: { error: "message", code: "VALIDATION_ERROR" }
+- 401 for unauthorized, 403 for forbidden.
+
+Deliverables:
+1) SQL migration file(s) or ORM models (Prisma/TypeORM/Sequelize) for above tables.
+2) Express (or chosen server framework) routes implementing the endpoints above.
+3) Integration in frontend:
+   - Replace mock fetches with real API calls (use fetch or axios).
+   - Add loading states and error toasts for UX.
+4) Seed script and README instructions for env variables:
+   - DB_URL, JWT_SECRET
+5) Unit tests for critical endpoints (create lead, list leads, update lead, create ad request). (Optional if timeline limited.)
+
+Notes / Constraints:
+- Do not expose any Management API keys (Meta tokens) in frontend.
+- Keep the admin increment endpoint for marketing counters protected (admin only); for now you can allow it via a single admin token set in env.
+
+After building, I will test flows:
+- Login as CP -> create lead -> see lead in Dashboard and Leads tab
+- Submit Run Ads -> see in "Your Ad Requests"
+- Check marketing counters results
+- Update profile -> values persist
+
+Implement this now and report back with any server errors or missing env vars.

@@ -1,0 +1,52 @@
+I want to add a "Home" navigation item INSIDE the sidebars of both admin panels (CP and Developer).
+
+Right now the CP sidebar items are:
+- Dashboard
+- Leads
+- Run Ads
+- Marketing Support
+- Profile
+
+And the Developer sidebar items are:
+- Dashboard
+- Projects
+- Channel Partners
+- Invite CPs
+- Marketing & Ads
+- Profile
+
+Please update the code as follows:
+
+1) CHANNEL PARTNER PANEL SIDEBAR
+--------------------------------
+- In the CP admin layout component (the one that renders the CP sidebar and uses `activeTab` to switch between Dashboard, Leads, etc.):
+  - Add a new sidebar item labeled **"Home"** with a home icon, consistent style with the others.
+  - Place it at the TOP of the list (above Dashboard) OR just below the logo — whichever is easier to implement cleanly.
+  - When "Home" is clicked:
+    - Use React Router to navigate to `/` (the public homepage).
+    - It should NOT change the `activeTab` state or try to render content inside the panel; it simply redirects to `/`.
+
+- Do NOT add a new tab/content section for "Home" in the CP panel; it’s just a shortcut out of the panel to the main site.
+
+2) DEVELOPER PANEL SIDEBAR
+---------------------------
+- In the Developer admin layout component (the one with Dashboard / Projects / Channel Partners / etc.):
+  - Add the same type of **"Home"** item to its sidebar.
+  - Place in a similar position (top of the list under the logo or just above Dashboard).
+  - On click, navigate to `/` (homepage) using React Router.
+  - Again, do NOT add an `activeTab` for Home; it should not render content inside the developer panel, only redirect out.
+
+3) STYLING & BEHAVIOR
+----------------------
+- The "Home" item should visually match the other sidebar items (icon + label, hover state, etc.).
+- It should NOT be highlighted as an "active tab" after navigation, because once the user is on `/`, they are no longer inside the admin layout.
+- Do not remove or rename any existing sidebar items (Dashboard, Leads, etc.).
+
+4) DO NOT CHANGE:
+-----------------
+- Existing homepage
+- Login / role logic
+- CP and Developer dashboard content
+- Top navbar behavior
+
+Just update the sidebars to include a working "Home" item that redirects to `/`.

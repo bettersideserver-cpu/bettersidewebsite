@@ -1,0 +1,41 @@
+I want to add a very clear **Home button** to BOTH admin panels:
+
+- Channel Partner (CP) Admin Panel
+- Developer Admin Panel
+
+Right now, the user can only go back to the homepage by clicking on the BetterSide logo, which is not obvious. I want a dedicated Home button.
+
+Please do the following:
+
+1) In the GLOBAL NAVBAR (the one that appears at the top for all pages when logged in):
+   - Add a visible text link or button labeled **"Home"**.
+   - Place it in the main navigation area (for example, next to "Explore Projects" or before any dashboard links).
+   - When clicked, it should navigate to the `/` route (homepage) using React Router (`useNavigate` or `<Link to="/" />`).
+   - Keep the BetterSide logo behavior as it is (still clickable to home), but the new Home link must be clearly visible.
+
+2) Inside the CP Admin Panel layout:
+   - At the top of the main content area (near the page title or top bar), add a small secondary button or text link labeled **"Back to Home"** or just **"Home"**.
+   - This must navigate to `/` (homepage) without breaking the CP dashboard state.
+   - Use a subtle but visible style (e.g., outline button or a simple text link with an icon).
+   - Do NOT remove or change the sidebar items (Dashboard, Leads, Run Ads, Marketing Support, Profile).
+
+3) Inside the Developer Admin Panel layout:
+   - Same behavior: at the top of the main content area, add a **"Back to Home"** or **"Home"** button/link.
+   - It should navigate to `/` using React Router.
+   - Styling should match or be similar to the CP panel Home button, so the UI feels consistent.
+   - Keep all existing tabs (Dashboard, Projects, Channel Partners, Invite CPs, Marketing & Ads, Profile) unchanged.
+
+4) Make sure:
+   - No new routes are created. The Home button should simply reuse the existing `/` route.
+   - No 404s are introduced.
+   - The addition should NOT break existing role-based behavior:
+     - CP can still go to `/cp-dashboard`.
+     - Developer can still go to `/developer-dashboard`.
+     - Home button is just an extra quick access.
+
+5) Do not change:
+   - Login/signup flow.
+   - Role handling in localStorage.
+   - Any of the existing dashboard content.
+
+Just add the Home button/link in navbar + a small Home/Back to Home control inside both admin layouts as described.

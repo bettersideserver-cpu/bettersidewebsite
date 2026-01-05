@@ -1,0 +1,58 @@
+Upgrade the existing BetterSide HERO section into an interactive, high-performance hero using React + modern CSS/JS. Keep the current layout, brand colors (#0057FF blue, #FF6A00 orange) and logo placeholder. Implement the following interactive features and fallbacks:
+
+REQUIREMENTS:
+- Use React functional components. Keep code modular (e.g., Hero, ParallaxLayer, Particles, CTAButton).
+- Respect `prefers-reduced-motion` setting and disable non-essential animations in that case.
+- Ensure mobile performance: disable mouse-parallax and particle canvas on small screens (< 768px). Use simple scroll parallax only.
+- No external heavy libraries unless necessary; lightweight libs like GSAP are allowed but avoid bloated dependencies.
+- Add comments explaining key logic and where to tune values.
+
+INTERACTIVE FEATURES TO IMPLEMENT:
+
+1) Parallax on scroll
+- The background image has a gentle vertical parallax as the user scrolls down.
+- Implement using `window.requestAnimationFrame` + transform (translateY) for smoothness or use CSS `transform` driven by IntersectionObserver.
+
+2) Mouse-move parallax layers (desktop only)
+- Split hero visuals into three layers: background, mid-layer (decorative shapes), and foreground card (headline & CTAs).
+- On mouse move, move layers with different intensities:
+  - background: translateX/Y by 2-6px
+  - mid-layer: 6-12px
+  - foreground: 2-4px (subtle)
+- Apply `transform: translate3d(...)` for GPU acceleration.
+- Throttle mouse events to 60fps using `requestAnimationFrame`.
+
+3) Floating particles (optional lightweight canvas)
+- A small particle field (20–40 dots) drifting slowly behind content.
+- Use HTML5 canvas simple loop; on mobile disable or reduce to 6–8 particles.
+- Particles should be subtle, low-contrast, and not interfere with readability.
+
+4) Hero content reveal and micro animations
+- Headline and subheading should fade+slide up on mount (`opacity` + `translateY`).
+- CTA buttons appear with small stagger (0.1–0.15s delay).
+- Button hover: scale 1.03 with soft shadow; click creates a small ripple effect.
+
+5) Interactive CTA behavior
+- Primary CTA ("Explore IPX Projects") should show a 2-step micro-interaction:
+  - Hover: glow/outline animation using CSS variables.
+  - Click: animate a subtle transform and then call a placeholder callback (e.g., `onExploreClick()`).
+- Secondary CTA ("Talk to Our Team") should have an outline style and a subtle border animation on hover.
+
+6) Accessibility
+- Add `aria-label` for CTAs.
+- Make hero keyboard-navigable.
+- Respect `prefers-reduced-motion` and `prefers-contrast`.
+
+7) Performance & fallback
+- Lazy-load hero background image (use `loading="lazy"` or IntersectionObserver).
+- If `window.matchMedia('(max-width: 767px)')` is true, disable mouse parallax and particles.
+- Use CSS variables for tuning motion intensity.
+
+DELIVERABLES:
+- A React component `InteractiveHero.jsx` (or .tsx) plus CSS (or module) and a small `particles.js` helper if needed.
+- Example usage in `HomePage` replacing the old hero.
+- Tunable variables at the top of the component (particleCount, parallaxIntensity, mouseMoveFactor).
+- Comments telling where to change colors, durations, and particle counts.
+- Do not touch backend or routing.
+
+Note: keep the hero visually identical to our current design (logo on top-left, nav overlaid, centered headline/subheading, two CTAs), but with the described interactivity layered in. Provide a short README comment in the component describing how to disable/adjust animations.
